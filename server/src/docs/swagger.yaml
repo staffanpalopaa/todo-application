@@ -1,0 +1,207 @@
+openapi: 3.0.3
+info:
+  title: Todo App API Specification
+  description: API documentation for the Todo App bounded context.
+servers:
+  - url: /api/v1
+    description: Development Server
+tags:
+  - name: TodoApp
+    description: Operations related to the TodoApp bounded context.
+paths:
+  /complete-todo:
+    post:
+      summary: Complete Todo
+      description: Executes the "Complete Todo" command. ...
+      operationId: completeTodo
+      tags:
+        - TodoApp
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteTodoRequest'
+  /create-todo:
+    post:
+      summary: Create Todo
+      description: Executes the "Create Todo" command. ...
+      operationId: createTodo
+      tags:
+        - TodoApp
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoRequest'
+  /delete-todo:
+    post:
+      summary: Delete Todo
+      description: Executes the "Delete Todo" command. ...
+      operationId: deleteTodo
+      tags:
+        - TodoApp
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteTodoRequest'
+  /get-all-todos:
+    get:
+      summary: Get All Todos
+      description: Retrieves data based on the "Get All Todos" query. This is a synchronous query operation.
+      operationId: getAllTodos
+      tags:
+        - TodoApp
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /update-todo:
+    post:
+      summary: Update Todo
+      description: Executes the "Update Todo" command. ...
+      operationId: updateTodo
+      tags:
+        - TodoApp
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoRequest'
+components:
+  schemas:
+    CompleteTodoRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: todo-a1b2c3d4
+      required:
+        - id
+    CreateTodoRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Buy groceries
+      required:
+        - description
+    DeleteTodoRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: todo-a1b2c3d4
+      required:
+        - id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An error occurred.
+    Todo:
+      type: object
+      description: Represents a Todo in the system.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the Todo (primary key).
+          example: todo-a1b2c3d4
+        description:
+          type: string
+          description: The description of the Todo.
+          example: Buy groceries
+        isCompleted:
+          type: string
+          description: The isCompleted of the Todo.
+          example: 'false'
+      required:
+        - id
+        - description
+    UpdateTodoRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: todo-a1b2c3d4
+        description:
+          type: string
+          example: Buy groceries
+      required:
+        - id
+        - description
+  parameters:
+    TodoId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the Todo.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: 'Bad Request: The server cannot or will not process the request due to something that is perceived to be a client error.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: 'Internal Server Error: The server has encountered a situation it doesn''t know how to handle.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'Not Found: The server can not find the requested resource.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
